@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import com.mysql.jdbc.Statement;
 
 public class ControladorDB {
@@ -49,7 +48,7 @@ public class ControladorDB {
 		    stmt = (Statement) conn.createStatement();
 		    createTableIfNotExists(stmt);
 
-		    rs = stmt.executeQuery("SELECT * FROM music");
+		    rs = stmt.executeQuery("SELECT * FROM tema");
 		    insertTema(new Temas("0000", "la cosa", "musical", "10:20", 2, null, null));
 		    
 		    for (int i = 0; i < 6; i++) {
@@ -95,7 +94,7 @@ public class ControladorDB {
 	}
 	
 	public static Connection getConnection() {
-		String URL = "jdbc:mysql://10.0.1.139:3306/puto";
+		String URL = "jdbc:mysql://10.128.137.19:3306/music_stream";
 		String user = "puto";
 		String contra = "puto";
 		Connection conn = null;
@@ -121,7 +120,7 @@ public class ControladorDB {
 	
 	public static void insertMusic(Statement stmt, ArrayList<Temas> allMusic) throws SQLException {
 		for (Temas music: allMusic) {
-		    stmt.execute("INSERT INTO music VALUES("+
+		    stmt.execute("INSERT INTO temas VALUES("+
 		    		"ID_Tema="+music.getId_tema()+", "+
 		    		"Titulo_tema="+music.getTitulo()+", "+
 		    		"Genero_Tema="+music.getGenero()+", "+
