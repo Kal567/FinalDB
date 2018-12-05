@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import com.mysql.jdbc.Statement;
 
 public class ControladorDB {
@@ -25,7 +24,7 @@ public class ControladorDB {
 		this.misArtistas = new ArrayList<>();
 		this.misAlbumes = new ArrayList<>();
 		this.misAgrupaciones = new ArrayList<>();
-		this.misTemas = new ArrayList<>();
+		ControladorDB.misTemas = new ArrayList<>();
 	}
 	
 	public static ControladorDB getInstance()
@@ -43,16 +42,19 @@ public class ControladorDB {
 		Statement stmt = null;
 		ResultSet rs = null;
 		Connection conn = getConnection();
+		ControladorDB.misTemas = new ArrayList<>();
 		
 
 		try {
 		    stmt = (Statement) conn.createStatement();
-		    createTableIfNotExists(stmt);
+//		    createTableIfNotExists(stmt);
+		    Temas tema = new Temas(6, "la cosa", "musical", "4.20", 3, null, null);
 
-		    rs = stmt.executeQuery("SELECT * FROM music");
-		    insertTema(new Temas("0000", "la cosa", "musical", "10:20", 2, null, null));
+		    insertTema(tema);
+//		    insertMusic(stmt, misTemas);
+		    rs = stmt.executeQuery("SELECT * FROM temas");
 		    
-		    for (int i = 0; i < 6; i++) {
+		    while (!rs.isLast()) {
 			    rs.next();
 			    System.out.println(rs.getObject(1)+", "+rs.getObject(2));
 			}
@@ -95,7 +97,7 @@ public class ControladorDB {
 	}
 	
 	public static Connection getConnection() {
-		String URL = "jdbc:mysql://10.0.1.139:3306/puto";
+		String URL = "jdbc:mysql://10.0.0.6:3306/music_stream";
 		String user = "puto";
 		String contra = "puto";
 		Connection conn = null;
@@ -120,14 +122,22 @@ public class ControladorDB {
 	}
 	
 	public static void insertMusic(Statement stmt, ArrayList<Temas> allMusic) throws SQLException {
-		for (Temas music: allMusic) {
-		    stmt.execute("INSERT INTO music VALUES("+
-		    		"ID_Tema="+music.getId_tema()+", "+
-		    		"Titulo_tema="+music.getTitulo()+", "+
-		    		"Genero_Tema="+music.getGenero()+", "+
-		    		"duracion="+music.getDuracion()+", "+
-		    		"orden_tema="+music.getPosicionDentroDeLaReproduccion()+
-		    		")");
+		try {
+			for (Temas music: allMusic) {
+			    stmt.execute("INSERT INTO temas set "+
+			    		"ID_Tema="+music.getId_tema()+", "+
+			    		"titulo_tema='"+music.getTitulo()+"', "+
+			    		"Genero_Tema='"+music.getGenero()+"', "+
+			    		"duracion="+music.getDuracion()+", "+
+			    		"orden_tema="+music.getPosicionDentroDeLaReproduccion()+", "+
+			    		"fk_artista="+null+", "+
+			    		"fk_grupo="+null+", "+
+			    		"fk_album="+null+
+			    		";");
+			}
+			
+		} catch (Exception e) {
+			System.out.println(e);
 		}
 	}
 
