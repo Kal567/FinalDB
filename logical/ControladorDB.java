@@ -50,14 +50,9 @@ public class ControladorDB {
 //		    createTableIfNotExists(stmt);
 		    Temas tema = new Temas(6, "la cosa", "musical", "4.20", 3, null, null);
 
-<<<<<<< HEAD
-		    rs = stmt.executeQuery("SELECT * FROM tema");
-		    insertTema(new Temas("0000", "la cosa", "musical", "10:20", 2, null, null));
-=======
 		    insertTema(tema);
 //		    insertMusic(stmt, misTemas);
 		    rs = stmt.executeQuery("SELECT * FROM temas");
->>>>>>> branch 'feature' of https://github.com/Kal567/FinalDB.git
 		    
 		    while (!rs.isLast()) {
 			    rs.next();
@@ -102,11 +97,7 @@ public class ControladorDB {
 	}
 	
 	public static Connection getConnection() {
-<<<<<<< HEAD
-		String URL = "jdbc:mysql://10.128.137.19:3306/music_stream";
-=======
-		String URL = "jdbc:mysql://10.0.0.6:3306/music_stream";
->>>>>>> branch 'feature' of https://github.com/Kal567/FinalDB.git
+		String URL = "jdbc:mysql://10.0.0.19:3306/music_stream";
 		String user = "puto";
 		String contra = "puto";
 		Connection conn = null;
@@ -131,16 +122,6 @@ public class ControladorDB {
 	}
 	
 	public static void insertMusic(Statement stmt, ArrayList<Temas> allMusic) throws SQLException {
-<<<<<<< HEAD
-		for (Temas music: allMusic) {
-		    stmt.execute("INSERT INTO temas VALUES("+
-		    		"ID_Tema="+music.getId_tema()+", "+
-		    		"Titulo_tema="+music.getTitulo()+", "+
-		    		"Genero_Tema="+music.getGenero()+", "+
-		    		"duracion="+music.getDuracion()+", "+
-		    		"orden_tema="+music.getPosicionDentroDeLaReproduccion()+
-		    		")");
-=======
 		try {
 			for (Temas music: allMusic) {
 			    stmt.execute("INSERT INTO temas set "+
@@ -157,7 +138,6 @@ public class ControladorDB {
 			
 		} catch (Exception e) {
 			System.out.println(e);
->>>>>>> branch 'feature' of https://github.com/Kal567/FinalDB.git
 		}
 	}
 
