@@ -2,6 +2,10 @@
 <classpath>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
+<<<<<<< HEAD
 	<classpathentry exported="true" kind="lib" path="C:/Users/Saul Feliciano/Downloads/Librerias/jfreechart-1.0.19/lib/mysql-connector-java-5.1.47-bin.jar"/>
+=======
+	<classpathentry exported="true" kind="lib" path="C:/Users/Intellisys/Desktop/mysql/mysql-connector-java-5.1.47/mysql-connector-java-5.1.47-bin.jar"/>
+>>>>>>> branch 'feature' of https://github.com/Kal567/FinalDB.git
 	<classpathentry kind="output" path="bin"/>
 </classpath>
