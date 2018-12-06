@@ -9,11 +9,13 @@ public class Temas {
 	private String genero;
 	private String Duracion;
 	private int posicionDentroDeLaReproduccion;
+	private Artista artistAutor;
+	private Grupo grupoAutor;
 	private ArrayList<Artista> artistasInvitados;
 	private ArrayList<Grupo> gruposInvitados;
 	
 	public Temas(int id_tema, String titulo, String genero, String duracion, int posicionDentroDeLaReproduccion,
-			ArrayList<Artista> artistasInvitados, ArrayList<Grupo> gruposInvitados) {
+			ArrayList<Artista> artistasInvitados, ArrayList<Grupo> gruposInvitados, Artista artistAutor, Grupo grupoAutor) {
 		super();
 		this.id_tema = id_tema;
 		this.titulo = titulo;
@@ -22,7 +24,9 @@ public class Temas {
 		this.posicionDentroDeLaReproduccion = posicionDentroDeLaReproduccion;
 		this.artistasInvitados = artistasInvitados;
 		this.gruposInvitados = gruposInvitados;
-	}
+		this.artistAutor = artistAutor;
+		this.grupoAutor = grupoAutor;
+		}
 
 	public String getTitulo() {
 		return titulo;
@@ -76,6 +80,12 @@ public class Temas {
 		return id_tema;
 	}
 	
-	
+	public Artista getArtistAutor() {
+		return artistAutor;
+	}
+
+	public Grupo getGrupoAutor() {
+		return grupoAutor;
+	}
 	
 }
