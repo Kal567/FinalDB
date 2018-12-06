@@ -9,7 +9,7 @@ public class Usuario extends Persona {
 	private String fechaDeRegistro;
 	private String Email;
 	
-	public Usuario(String id, String nombre, String lugarDeNacimiento, String fechaDeNacimiento, char sexo, String id2,
+	public Usuario(String id, String nombre, String lugarDeNacimiento, String fechaDeNacimiento, char sexo,
 			String id_persona, String contrasena, String fechaDeUltimoAcceso, String fechaDeRegistro, String email) {
 		super(id, nombre, lugarDeNacimiento, fechaDeNacimiento, sexo);
 		id_usuario = "U-" + ControladorDB.getInstance().getMisUsuarios().size();
