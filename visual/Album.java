@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Album extends JDialog{
 	private JPanel panel = new JPanel();
@@ -72,7 +74,7 @@ public class Album extends JDialog{
 		panel_1.add(label_1);
 		
 		JLabel label_2 = new JLabel("Precio:");
-		label_2.setBounds(46, 95, 39, 14);
+		label_2.setBounds(46, 95, 46, 14);
 		panel_1.add(label_2);
 		
 		precio_album = new JTextField();
@@ -98,6 +100,11 @@ public class Album extends JDialog{
 		panel_1.add(btn_registrar);
 		
 		Button btn_cancelar = new Button("Cancelar");
+		btn_cancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		btn_cancelar.setBounds(225, 296, 70, 22);
 		panel_1.add(btn_cancelar);
 	}

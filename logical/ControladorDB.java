@@ -16,6 +16,8 @@ public class ControladorDB {
 	private ArrayList<Grupo> misAgrupaciones;
 	private static ArrayList<Temas> misTemas;
 	private static ControladorDB control = null;
+	private static Statement stmt = null;
+	private static ResultSet rs = null;
 	
 	private ControladorDB() {
 		super();
@@ -39,18 +41,16 @@ public class ControladorDB {
 	
 	public static void main(String[] args) throws SQLException {			
 
-		Statement stmt = null;
-		ResultSet rs = null;
-		Connection conn = getConnection();
+		
 		ControladorDB.misTemas = new ArrayList<>();
 		
 
 		try {
-		    stmt = (Statement) conn.createStatement();
+//		    stmt = (Statement) conn.createStatement();
 //		    createTableIfNotExists(stmt);
-		    Temas tema = new Temas(6, "la cosa", "musical", "4.20", 3, null, null);
+//		    Temas tema = new Temas(6, "la cosa", "musical", "4.20", 3, null, null);
 
-		    insertTema(tema);
+//		    insertTema(tema);
 //		    insertMusic(stmt, misTemas);
 		    rs = stmt.executeQuery("SELECT * FROM temas");
 		    
@@ -91,13 +91,13 @@ public class ControladorDB {
 		}
 		
 		
-		conn.close();
-		System.out.println(conn.isClosed());
+//		conn.close();
+//		System.out.println(conn.isClosed());
 		
 	}
 	
-	public static Connection getConnection() {
-		String URL = "jdbc:mysql://10.0.0.19:3306/music_stream";
+	public static void getConnection() throws SQLException {
+		String URL = "jdbc:mysql://10.0.0.6:3306/music_stream";
 		String user = "puto";
 		String contra = "puto";
 		Connection conn = null;
@@ -108,10 +108,10 @@ public class ControladorDB {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		return conn;
+		stmt = (Statement) conn.createStatement();
 	}
 	
-	public static void createTableIfNotExists(Statement stmt) throws SQLException {
+	public static void createTableIfNotExists() throws SQLException {
 		
 		try {
 		    stmt.execute("Create table Persona(ID_Persona int primary key not null, Primer_Nombre varchar2(50) not null, Primer_Apellido varchar2(50), Ciudad_Nacimiento varchar2(30) not null, Pais_Nacimiento varchar2(30) not null, Fecha_Nacimiento date not null, Sexo char(1) not null check (Sexo IN ('F', 'M',));");			
@@ -121,7 +121,7 @@ public class ControladorDB {
 //	    stmt.execute("DROP TABLE root1.bar");
 	}
 	
-	public static void insertMusic(Statement stmt, ArrayList<Temas> allMusic) throws SQLException {
+	public static void insertMusic(ArrayList<Temas> allMusic) throws SQLException {
 		try {
 			for (Temas music: allMusic) {
 			    stmt.execute("INSERT INTO temas set "+
@@ -167,6 +167,21 @@ public class ControladorDB {
 	
 	public static void insertTema(Temas tema) {
 		misTemas.add(tema);		
+	}
+	
+	public static Boolean login(String username, String password) throws SQLException {
+		if(stmt != null) {
+			getConnection();
+		}
+		Boolean result = false;
+		rs = stmt.executeQuery("SELECT fk_id_persona, id_usuario FROM usuario WHERE "+
+								"username='"+username+"' AND "+
+								"contrasena='"+password+"';");
+	    
+	    if (!rs.isLast()) {
+		    result = true;
+		}
+		return result;
 	}
 	
 }

@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 
@@ -68,24 +69,29 @@ public class Login extends JDialog{
 		//
 		btn_ingresar = new JButton("Ingresar");
 		btn_ingresar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {/*
-				boolean acceso = Main.getInstance().login(txt_usuario.getText(), txt_contrasena.getText());
-				String tipo ="";
+			public void actionPerformed(ActionEvent e) {
+				
+				boolean acceso = false;
+				try {
+					acceso = ControladorDB.login(txt_usuario.getText().toString(), passwordField.getText().toString());
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				if(acceso)
 				{
-					tipo = Consultorio.getInstance().getTipousuario(txtCedula.getText());
-					//Principal principal = new Principal(tipo);
-					Principal.main(null, tipo);
+					Principal principal = new Principal(txt_usuario.getText().toString());
+					principal.setVisible(true);
 					dispose();
 				}
 				else
 				{
 					JOptionPane.showMessageDialog(null, "Usuario y/o clave incorrectos");
-					txtClave.setText("");
-					txtCedula.requestFocus();
+					passwordField.setText("");
+					passwordField.requestFocus();
 				}
-			}*/
 			}
+			
 		});
 		btn_ingresar.setBounds(105, 212, 89, 23);
 		getContentPane().add(btn_ingresar);
