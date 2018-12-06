@@ -8,7 +8,6 @@ public class Grupo {
 	private String nombre_grupo;
 	private String fechaDeFormacion;
 	private String lugarDeProcedencia;
-	private ArrayList<Album> albumesAgrupacion;
 	
 	public Grupo(String id_grupo, String nombre_grupo, String fechaDeFormacion,
 			String lugarDeProcedencia) {
@@ -37,10 +36,6 @@ public class Grupo {
 
 	public void setLugarDeProcedencia(String lugarDeProcedencia) {
 		this.lugarDeProcedencia = lugarDeProcedencia;
-	}
-
-	public ArrayList<Album> getAlbumesAgrupacion() {
-		return albumesAgrupacion;
 	}
 
 	public String getNombre_grupo() {

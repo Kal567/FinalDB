@@ -373,12 +373,12 @@ public class RegistrarTema extends JDialog {
 							Temas nuevoTema = new Temas("T-"+1, txtTitulo.getText(), cbxGenero.getSelectedItem().toString(), txtDuracion.getText(), (int) spnOrden.getValue(), arregloDeArtistInvitados(st), arregloDeGruposInvitados(st), null, null, null);
 							ArrayList<Temas> music = new ArrayList<Temas>();
 							music.add(nuevoTema);
-							try {
+							/*try {
 								ControladorDB.insertMusic(music);
 							} catch (SQLException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
-							}
+							}*/
 						}
 					}
 				});
@@ -394,7 +394,7 @@ public class RegistrarTema extends JDialog {
 		}
 		
 		loadArtistas();
-		loadGrupos();
+		//loadGrupos();
 	}
 	
 	private ArrayList<Grupo> arregloDeGruposInvitados(Statement st2) {
@@ -450,12 +450,12 @@ public class RegistrarTema extends JDialog {
 		modelGrupSelect.removeAllElements();
 	}
 
-	private void loadGrupos() throws SQLException {
+	/*private void loadGrupos() throws SQLException {
 		for(Grupo grupo: ControladorDB.obtenerGrupos()) {
 			modelGrupSelect.addElement(grupo.getNombre_grupo());
 		}
 		listArtistasSeleccionados.setModel(modelArtistaSelect);
-	}
+	}*/
 
 	private void loadArtistas() {
 		// TODO JOrge resuelve este metodo papu

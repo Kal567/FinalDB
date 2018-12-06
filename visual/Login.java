@@ -73,12 +73,12 @@ public class Login extends JDialog{
 			public void actionPerformed(ActionEvent e) {
 				
 				boolean acceso = false;
-				try {
-					acceso = ControladorDB.login(txt_usuario.getText().toString(), passwordField.getText().toString(), txtHost.getText().toString());
+				/*try {
+					/*acceso = ControladorDB.login(txt_usuario.getText().toString(), passwordField.getText().toString(), txtHost.getText().toString());
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}
+				}*/
 				if(acceso)
 				{
 					Principal principal = new Principal(txt_usuario.getText().toString());

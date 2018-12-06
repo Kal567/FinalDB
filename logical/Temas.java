@@ -27,7 +27,7 @@ public class Temas {
 		this.gruposInvitados = gruposInvitados;
 		this.artistAutor = artistAutor;
 		this.grupoAutor = grupoAutor;
-		this.album = album;
+		this.setAlbum(album);
 		}
 
 	public String getTitulo() {
@@ -88,6 +88,14 @@ public class Temas {
 
 	public Grupo getGrupoAutor() {
 		return grupoAutor;
+	}
+
+	public Album getAlbum() {
+		return album;
+	}
+
+	public void setAlbum(Album album) {
+		this.album = album;
 	}
 	
 }
