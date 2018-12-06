@@ -9,6 +9,8 @@ public class Temas {
 	private String genero;
 	private String Duracion;
 	private int posicionDentroDeLaReproduccion;
+	private Artista artistaAutor;
+	//private e
 	private ArrayList<Artista> artistasInvitados;
 	private ArrayList<Grupo> gruposInvitados;
 	
