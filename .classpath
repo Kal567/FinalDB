@@ -2,6 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path=""/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_171"/>
-	<classpathentry exported="true" kind="lib" path="C:/Users/Saul Feliciano/Downloads/Librerias/jfreechart-1.0.19/lib/mysql-connector-java-5.1.47-bin.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/baby_/Desktop/MySQL connector/mysql-connector-java-5.1.47/mysql-connector-java-5.1.47-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
