@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JPasswordField;
 
 public class Login extends JDialog{
 	/**
@@ -25,9 +26,9 @@ public class Login extends JDialog{
 	private JLabel label;
 	private JTextField txt_usuario;
 	private JLabel label_1;
-	private JTextField txt_contrasena;
 	private JButton btn_ingresar;
 	private JButton btn_cancelar;
+	private JPasswordField passwordField;
 	
 	/**
 	 * Launch the application.
@@ -52,10 +53,6 @@ public class Login extends JDialog{
 		getContentPane().add(panel, BorderLayout.CENTER);
 		getContentPane().setLayout(null);
 		
-		panel = new JPanel();
-		panel.setBounds(223, 148, 147, 20);
-		getContentPane().add(panel);
-		
 		label = new JLabel("Usuario:");
 		label.setBounds(105, 120, 68, 14);
 		getContentPane().add(label);
@@ -68,11 +65,6 @@ public class Login extends JDialog{
 		label_1 = new JLabel("Contrase\u00F1a:");
 		label_1.setBounds(105, 151, 108, 14);
 		getContentPane().add(label_1);
-		
-		txt_contrasena = new JTextField();
-		txt_contrasena.setColumns(10);
-		txt_contrasena.setBounds(223, 148, 147, 20);
-		getContentPane().add(txt_contrasena);
 		//
 		btn_ingresar = new JButton("Ingresar");
 		btn_ingresar.addActionListener(new ActionListener() {
@@ -99,7 +91,16 @@ public class Login extends JDialog{
 		getContentPane().add(btn_ingresar);
 		
 		btn_cancelar = new JButton("Cancelar");
+		btn_cancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		btn_cancelar.setBounds(256, 212, 89, 23);
 		getContentPane().add(btn_cancelar);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(193, 148, 137, 20);
+		getContentPane().add(passwordField);
 	}
 }
