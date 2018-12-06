@@ -8,10 +8,6 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-
-import logical.ControladorDB;
-import logical.Temas;
-
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
@@ -19,32 +15,13 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JSpinner;
 import javax.swing.JRadioButton;
 import javax.swing.border.BevelBorder;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.JScrollBar;
-import javax.swing.JList;
-import javax.swing.ListSelectionModel;
-import java.awt.Color;
 
 public class RegistrarTema extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtTitulo;
 	private JTextField txtDuracion;
-	private JComboBox cbxGenero;
-	private JComboBox cbxAlbum;
-	private JRadioButton rdbtnArtista;
-	private JRadioButton rdbtnAgrupacin;
-	private JComboBox cbxArtista;
-	private JComboBox cbxAgrupacion;
-	private JSpinner spnOrden;
-	private JTextField txtBuscarArtistaReg;
-	private JTextField txtBuscarArtistaSeleccionado;
-	private JTextField txtBuscarGrupReg;
-	private JTextField txtBuscarGrupSelect;
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -54,181 +31,81 @@ public class RegistrarTema extends JDialog {
 	 */
 	public RegistrarTema() {
 		setTitle("Registrar Tema");
-		setBounds(100, 100, 1566, 959);
+		setBounds(100, 100, 854, 710);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		{
 			JPanel panel = new JPanel();
-			contentPanel.add(panel, BorderLayout.CENTER);
 			panel.setBorder(new TitledBorder(null, "Registro de Tema", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			contentPanel.add(panel, BorderLayout.CENTER);
 			panel.setLayout(null);
 			
-			JPanel panelArtistaoGrupo = new JPanel();
-			panelArtistaoGrupo.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null), "Procedencia del Tema", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panelArtistaoGrupo.setBounds(55, 482, 692, 223);
-			panel.add(panelArtistaoGrupo);
-			panelArtistaoGrupo.setLayout(null);
-			
-			rdbtnArtista = new JRadioButton("Artista");
-			rdbtnArtista.setBounds(90, 65, 149, 41);
-			panelArtistaoGrupo.add(rdbtnArtista);
-			
-			rdbtnAgrupacin = new JRadioButton("Agrupaci\u00F3n");
-			rdbtnAgrupacin.setBounds(356, 65, 251, 41);
-			panelArtistaoGrupo.add(rdbtnAgrupacin);
-			
-			cbxArtista = new JComboBox();
-			cbxArtista.setBounds(100, 121, 170, 39);
-			panelArtistaoGrupo.add(cbxArtista);
-			
-			cbxAgrupacion = new JComboBox();
-			cbxAgrupacion.setBounds(366, 121, 194, 39);
-			panelArtistaoGrupo.add(cbxAgrupacion);
-			
-			JPanel panelContribuciones = new JPanel();
-			panelContribuciones.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null), "Contribuciones", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panelContribuciones.setBounds(795, 54, 703, 739);
-			panel.add(panelContribuciones);
-			panelContribuciones.setLayout(null);
-			
-			JList listArtistasBuscados = new JList();
-			listArtistasBuscados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			listArtistasBuscados.setBounds(26, 130, 282, 244);
-			panelContribuciones.add(listArtistasBuscados);
-			
-			JLabel lblArtistasRegistrados = new JLabel("Artistas Registrados:");
-			lblArtistasRegistrados.setBounds(26, 38, 255, 33);
-			panelContribuciones.add(lblArtistasRegistrados);
-			
-			JLabel lblArtistasSeleccionados = new JLabel("Artistas Seleccionados:");
-			lblArtistasSeleccionados.setBounds(406, 38, 271, 33);
-			panelContribuciones.add(lblArtistasSeleccionados);
-			
-			JList listArtistasSeleccionados = new JList();
-			listArtistasSeleccionados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			listArtistasSeleccionados.setBounds(406, 130, 282, 244);
-			panelContribuciones.add(listArtistasSeleccionados);
-			
-			txtBuscarArtistaReg = new JTextField();
-			txtBuscarArtistaReg.setBounds(26, 79, 236, 39);
-			panelContribuciones.add(txtBuscarArtistaReg);
-			txtBuscarArtistaReg.setColumns(10);
-			
-			JButton btnBuscarArtReg = new JButton("");
-			btnBuscarArtReg.setBounds(268, 78, 40, 40);
-			panelContribuciones.add(btnBuscarArtReg);
-			
-			txtBuscarArtistaSeleccionado = new JTextField();
-			txtBuscarArtistaSeleccionado.setColumns(10);
-			txtBuscarArtistaSeleccionado.setBounds(406, 79, 236, 39);
-			panelContribuciones.add(txtBuscarArtistaSeleccionado);
-			
-			JButton btnBuscarArtSelect = new JButton("");
-			btnBuscarArtSelect.setBounds(648, 78, 40, 40);
-			panelContribuciones.add(btnBuscarArtSelect);
-			
-			JLabel lblAgrupacionesRegistrados = new JLabel("Grupos Registrados:");
-			lblAgrupacionesRegistrados.setBounds(26, 389, 255, 33);
-			panelContribuciones.add(lblAgrupacionesRegistrados);
-			
-			txtBuscarGrupReg = new JTextField();
-			txtBuscarGrupReg.setColumns(10);
-			txtBuscarGrupReg.setBounds(26, 430, 236, 39);
-			panelContribuciones.add(txtBuscarGrupReg);
-			
-			JButton btnGrupReg = new JButton("");
-			btnGrupReg.setBounds(268, 429, 40, 40);
-			panelContribuciones.add(btnGrupReg);
-			
-			JList listGrupReg = new JList();
-			listGrupReg.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			listGrupReg.setBounds(26, 481, 282, 244);
-			panelContribuciones.add(listGrupReg);
-			
-			JLabel lblGruposSeleccionados = new JLabel("Grupos Seleccionados:");
-			lblGruposSeleccionados.setBounds(406, 389, 271, 33);
-			panelContribuciones.add(lblGruposSeleccionados);
-			
-			txtBuscarGrupSelect = new JTextField();
-			txtBuscarGrupSelect.setColumns(10);
-			txtBuscarGrupSelect.setBounds(406, 430, 236, 39);
-			panelContribuciones.add(txtBuscarGrupSelect);
-			
-			JButton btnGrupSelect = new JButton("");
-			btnGrupSelect.setBounds(648, 429, 40, 40);
-			panelContribuciones.add(btnGrupSelect);
-			
-			JList listGrupSelect = new JList();
-			listGrupSelect.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			listGrupSelect.setBounds(406, 481, 282, 244);
-			panelContribuciones.add(listGrupSelect);
-			
-			JButton btnArtIzq = new JButton(">");
-			btnArtIzq.setBounds(316, 179, 80, 39);
-			panelContribuciones.add(btnArtIzq);
-			
-			JButton btnArtDer = new JButton("<");
-			btnArtDer.setBounds(316, 265, 80, 39);
-			panelContribuciones.add(btnArtDer);
-			
-			JButton btnGrupIzq = new JButton(">");
-			btnGrupIzq.setBounds(316, 542, 80, 39);
-			panelContribuciones.add(btnGrupIzq);
-			
-			JButton btnGrupDer = new JButton("<");
-			btnGrupDer.setBounds(316, 627, 80, 39);
-			panelContribuciones.add(btnGrupDer);
-			
-			JPanel panelDatosTema = new JPanel();
-			panelDatosTema.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null), "Datos Tema", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-			panelDatosTema.setBounds(55, 66, 692, 388);
-			panel.add(panelDatosTema);
-			panelDatosTema.setLayout(null);
-			
 			JLabel lblTitulo = new JLabel("T\u00EDtulo:");
-			lblTitulo.setBounds(26, 58, 115, 33);
-			panelDatosTema.add(lblTitulo);
+			lblTitulo.setBounds(55, 54, 115, 33);
+			panel.add(lblTitulo);
 			
 			txtTitulo = new JTextField();
-			txtTitulo.setBounds(26, 100, 236, 39);
-			panelDatosTema.add(txtTitulo);
+			txtTitulo.setBounds(55, 99, 236, 39);
+			panel.add(txtTitulo);
 			txtTitulo.setColumns(10);
 			
 			JLabel lblGenero = new JLabel("G\u00E9nero:");
-			lblGenero.setBounds(324, 61, 115, 33);
-			panelDatosTema.add(lblGenero);
+			lblGenero.setBounds(381, 54, 115, 33);
+			panel.add(lblGenero);
 			
-			cbxGenero = new JComboBox<>();
-			cbxGenero.setBounds(323, 100, 236, 39);
-			panelDatosTema.add(cbxGenero);
+			JComboBox cbxGenero = new JComboBox();
 			cbxGenero.setModel(new DefaultComboBoxModel(new String[] {"Blues", "Corrido", "Country", "Cumbia", "Disco", "Electr\u00F3nica", "Flamenco", "Folk", "Funk", "Gospel", "Heavy Metal", "Hip Hop", "Indie\u200B", "Jazz\u200B", "Merengue", "Pop", "Punk", "Ranchera", "Rap", "Reggae", "Reggaeton", "Rumba", "Rhythm and Blues", "Rock", "Rock and Roll", "Salsa", "Son", "Soul", "Tango", "Vallenato"}));
+			cbxGenero.setBounds(381, 99, 236, 39);
+			panel.add(cbxGenero);
 			
 			JLabel lblDuracin = new JLabel("Duraci\u00F3n:");
-			lblDuracin.setBounds(26, 204, 115, 33);
-			panelDatosTema.add(lblDuracin);
+			lblDuracin.setBounds(55, 191, 115, 33);
+			panel.add(lblDuracin);
 			
 			txtDuracion = new JTextField();
-			txtDuracion.setBounds(26, 251, 135, 39);
-			panelDatosTema.add(txtDuracion);
+			txtDuracion.setBounds(55, 243, 135, 39);
+			panel.add(txtDuracion);
 			txtDuracion.setColumns(10);
 			
 			JLabel lblAlbum = new JLabel("Album:");
-			lblAlbum.setBounds(202, 204, 115, 33);
-			panelDatosTema.add(lblAlbum);
+			lblAlbum.setBounds(245, 191, 115, 33);
+			panel.add(lblAlbum);
 			
-			cbxAlbum = new JComboBox();
-			cbxAlbum.setBounds(202, 251, 236, 39);
-			panelDatosTema.add(cbxAlbum);
+			JComboBox cbxAlbum = new JComboBox();
+			cbxAlbum.setBounds(245, 243, 236, 39);
+			panel.add(cbxAlbum);
 			
 			JLabel lblOrdenDelTema = new JLabel("Orden del Tema:");
-			lblOrdenDelTema.setBounds(463, 204, 203, 33);
-			panelDatosTema.add(lblOrdenDelTema);
+			lblOrdenDelTema.setBounds(534, 191, 203, 33);
+			panel.add(lblOrdenDelTema);
 			
-			spnOrden = new JSpinner();
-			spnOrden.setBounds(470, 250, 89, 40);
-			panelDatosTema.add(spnOrden);
+			JSpinner spinner = new JSpinner();
+			spinner.setBounds(544, 243, 89, 40);
+			panel.add(spinner);
+			
+			JPanel panelArtistaoGrupo = new JPanel();
+			panelArtistaoGrupo.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null), "Procedencia del Tema", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panelArtistaoGrupo.setBounds(55, 310, 692, 223);
+			panel.add(panelArtistaoGrupo);
+			panelArtistaoGrupo.setLayout(null);
+			
+			JRadioButton rdbtnArtista = new JRadioButton("Artista");
+			rdbtnArtista.setBounds(90, 65, 149, 41);
+			panelArtistaoGrupo.add(rdbtnArtista);
+			
+			JRadioButton rdbtnAgrupacin = new JRadioButton("Agrupaci\u00F3n");
+			rdbtnAgrupacin.setBounds(356, 65, 251, 41);
+			panelArtistaoGrupo.add(rdbtnAgrupacin);
+			
+			JComboBox cbxArtista = new JComboBox();
+			cbxArtista.setBounds(100, 121, 170, 39);
+			panelArtistaoGrupo.add(cbxArtista);
+			
+			JComboBox cbxAgrupacion = new JComboBox();
+			cbxAgrupacion.setBounds(366, 121, 194, 39);
+			panelArtistaoGrupo.add(cbxAgrupacion);
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -236,14 +113,6 @@ public class RegistrarTema extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
-				okButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						if(parametersCheck())
-						{
-							//Temas nuevoTema = new Temas(ControladorDB.getInstance().getMisTemas().size()+1, txtTitulo.getText(), cbxGenero.getSelectedItem().toString(), txtDuracion.getText(), Integer.parseInt(spnOrden.getValue()), artistasInvitados, gruposInvitados, )
-						}
-					}
-				});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
@@ -254,17 +123,5 @@ public class RegistrarTema extends JDialog {
 				buttonPane.add(btnSalir);
 			}
 		}
-	}
-
-	private boolean parametersCheck() {
-		
-		boolean bandera = true;
-		
-		if(txtTitulo == null || txtDuracion == null)
-		{
-			bandera = false;
-		}
-		
-		return bandera;
 	}
 }
