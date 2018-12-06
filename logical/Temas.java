@@ -4,18 +4,19 @@ import java.util.ArrayList;
 
 public class Temas {
 	
-	private int id_tema;
+	private String id_tema;
 	private String titulo;
 	private String genero;
 	private String Duracion;
 	private int posicionDentroDeLaReproduccion;
 	private Artista artistAutor;
 	private Grupo grupoAutor;
+	private Album album;
 	private ArrayList<Artista> artistasInvitados;
 	private ArrayList<Grupo> gruposInvitados;
 	
-	public Temas(int id_tema, String titulo, String genero, String duracion, int posicionDentroDeLaReproduccion,
-			ArrayList<Artista> artistasInvitados, ArrayList<Grupo> gruposInvitados, Artista artistAutor, Grupo grupoAutor) {
+	public Temas(String id_tema, String titulo, String genero, String duracion, int posicionDentroDeLaReproduccion,
+			ArrayList<Artista> artistasInvitados, ArrayList<Grupo> gruposInvitados, Artista artistAutor, Grupo grupoAutor, Album album) {
 		super();
 		this.id_tema = id_tema;
 		this.titulo = titulo;
@@ -26,6 +27,7 @@ public class Temas {
 		this.gruposInvitados = gruposInvitados;
 		this.artistAutor = artistAutor;
 		this.grupoAutor = grupoAutor;
+		this.album = album;
 		}
 
 	public String getTitulo() {
@@ -76,7 +78,7 @@ public class Temas {
 		this.gruposInvitados = gruposInvitados;
 	}
 
-	public int getId_tema() {
+	public String getId_tema() {
 		return id_tema;
 	}
 	

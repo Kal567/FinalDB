@@ -30,6 +30,7 @@ public class Login extends JDialog{
 	private JButton btn_ingresar;
 	private JButton btn_cancelar;
 	private JPasswordField passwordField;
+	private JTextField txtHost;
 	
 	/**
 	 * Launch the application.
@@ -47,7 +48,7 @@ public class Login extends JDialog{
 
 	public Login() {
 		setTitle("Log in");
-		setBounds(100, 100, 656, 401);
+		setBounds(100, 100, 441, 320);
 		setLocationRelativeTo(null);
 		panel.setBackground(new Color(176, 196, 222));
 		panel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -73,7 +74,7 @@ public class Login extends JDialog{
 				
 				boolean acceso = false;
 				try {
-					acceso = ControladorDB.login(txt_usuario.getText().toString(), passwordField.getText().toString());
+					acceso = ControladorDB.login(txt_usuario.getText().toString(), passwordField.getText().toString(), txtHost.getText().toString());
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -108,5 +109,14 @@ public class Login extends JDialog{
 		passwordField = new JPasswordField();
 		passwordField.setBounds(193, 148, 137, 20);
 		getContentPane().add(passwordField);
+		
+		txtHost = new JTextField();
+		txtHost.setColumns(10);
+		txtHost.setBounds(183, 86, 147, 20);
+		getContentPane().add(txtHost);
+		
+		JLabel lblHost = new JLabel("Host:");
+		lblHost.setBounds(105, 89, 68, 14);
+		getContentPane().add(lblHost);
 	}
 }

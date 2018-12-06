@@ -1,6 +1,7 @@
 package logical;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -52,7 +53,7 @@ public class ControladorDB {
 
 //		    insertTema(tema);
 //		    insertMusic(stmt, misTemas);
-		    rs = stmt.executeQuery("SELECT * FROM temas");
+//		    rs = stmt.executeQuery("SELECT * FROM temas");
 		    
 		    while (!rs.isLast()) {
 			    rs.next();
@@ -96,8 +97,8 @@ public class ControladorDB {
 		
 	}
 	
-	public static void getConnection() throws SQLException {
-		String URL = "jdbc:mysql://10.0.0.6:3306/music_stream";
+	public static void getConnection(String host) throws SQLException {
+		String URL = "jdbc:mysql://"+host+":3306/music_stream";
 		String user = "puto";
 		String contra = "puto";
 		Connection conn = null;
@@ -124,14 +125,43 @@ public class ControladorDB {
 	public static void insertMusic(ArrayList<Temas> allMusic) throws SQLException {
 		try {
 			for (Temas music: allMusic) {
+				String artista;
+				String grupo;
+				if(music.getArtistAutor() != null) {
+					artista = "fk_artista='"+music.getArtistAutor().getId_artista()+"', ";
+				}else {
+					artista = "fk_artista="+null+", ";
+				}
+				if(music.getGrupoAutor() != null) {
+					grupo = "fk_grupo='"+music.getGrupoAutor().getId_grupo()+"', ";
+				}else {
+					grupo = "fk_grupo="+null+", ";
+				}
+				
+				if(music.getArtistasInvitados() != null) {
+					for(Artista artista1: music.getArtistasInvitados()) {
+						stmt.execute("INSERT INTO artista_invitado set "+
+					    		"ID_Tema='"+music.getId_tema()+"', "+
+					    		"id_artista='"+artista1.getId_artista()+"', "+
+					    		";");
+					}
+				}
+				if(music.getGruposInvitados() != null) {
+					for(Grupo grupo1: music.getGruposInvitados()) {
+						stmt.execute("INSERT INTO artista_invitado set "+
+					    		"ID_Tema='"+music.getId_tema()+"', "+
+					    		"id_artista='"+grupo1.getId_grupo()+"', "+
+					    		";");
+					}
+				}
+	    		
 			    stmt.execute("INSERT INTO temas set "+
-			    		"ID_Tema="+music.getId_tema()+", "+
+			    		"ID_Tema='"+music.getId_tema()+"', "+
 			    		"titulo_tema='"+music.getTitulo()+"', "+
 			    		"Genero_Tema='"+music.getGenero()+"', "+
 			    		"duracion="+music.getDuracion()+", "+
 			    		"orden_tema="+music.getPosicionDentroDeLaReproduccion()+", "+
-			    		"fk_artista="+null+", "+
-			    		"fk_grupo="+null+", "+
+			    		artista + grupo +
 			    		"fk_album="+null+
 			    		";");
 			}
@@ -169,9 +199,9 @@ public class ControladorDB {
 		misTemas.add(tema);		
 	}
 	
-	public static Boolean login(String username, String password) throws SQLException {
-		if(stmt != null) {
-			getConnection();
+	public static Boolean login(String username, String password, String host) throws SQLException {
+		if(stmt == null) {
+			getConnection(host);
 		}
 		Boolean result = false;
 		rs = stmt.executeQuery("SELECT fk_id_persona, id_usuario FROM usuario WHERE "+
@@ -180,6 +210,26 @@ public class ControladorDB {
 	    
 	    if (!rs.isLast()) {
 		    result = true;
+		}
+		return result;
+	}
+	
+	public static ArrayList<Grupo> obtenerGrupos() throws SQLException {
+		ArrayList<Grupo> result = new ArrayList<Grupo>();
+		rs = stmt.executeQuery("SELECT id_grupo, nombre_grupo, fecha_formacion, ciudad_procedencia FROM grupo;");
+		while (!rs.isLast()) {
+			rs.next();
+			result.add(new Grupo((String) rs.getObject(1), (String) rs.getObject(2), ((Date) rs.getObject(3)).toString(), (String) rs.getObject(4)));
+		}
+		return result;
+	}
+
+	public static ArrayList<Artista> obtenerArtistas() throws SQLException {
+		ArrayList<Artista> result = new ArrayList<>();
+		rs = stmt.executeQuery("SELECT id_artista, nombre_artistico, fecha_formacion, ciudad_procedencia FROM artista;");
+		while (!rs.isLast()) {
+			rs.next();
+//			result.add(new Artista(id, nombre, lugarDeNacimiento, fechaDeNacimiento, sexo, id_artista, id_persona, nombreArtistico));
 		}
 		return result;
 	}

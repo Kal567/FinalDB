@@ -36,6 +36,7 @@ import javax.swing.ListSelectionModel;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 
 public class RegistrarTema extends JDialog {
 
@@ -78,12 +79,14 @@ public class RegistrarTema extends JDialog {
 
 	/**
 	 * Create the dialog.
+	 * @throws SQLException 
 	 */
-	public RegistrarTema() {
+	public RegistrarTema() throws SQLException {
 		setTitle("Registrar Tema");
 		setBounds(100, 100, 1566, 959);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setModal(true);
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		{
@@ -291,7 +294,7 @@ public class RegistrarTema extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					if(!datos.equalsIgnoreCase(""))
 					{
-						modelGrupSelect.addElement(modelGrupSelect.getElementAt(listGrupSelect.getSelectedIndex()));
+						modelGrupReg.addElement(modelGrupSelect.getElementAt(listGrupSelect.getSelectedIndex()));
 						listGrupReg.setModel(modelGrupReg);
 						modelGrupSelect.removeElementAt(listGrupSelect.getSelectedIndex());
 						listGrupSelect.setModel(modelGrupSelect);
@@ -367,7 +370,15 @@ public class RegistrarTema extends JDialog {
 					public void actionPerformed(ActionEvent e) {
 						if(parametersCheck())
 						{
-							Temas nuevoTema = new Temas(ControladorDB.getInstance().getMisTemas().size()+1, txtTitulo.getText(), cbxGenero.getSelectedItem().toString(), txtDuracion.getText(), (int) spnOrden.getValue(), arregloDeArtistInvitados(st), arregloDeGruposInvitados(st), null, null);
+							Temas nuevoTema = new Temas("T-"+1, txtTitulo.getText(), cbxGenero.getSelectedItem().toString(), txtDuracion.getText(), (int) spnOrden.getValue(), arregloDeArtistInvitados(st), arregloDeGruposInvitados(st), null, null, null);
+							ArrayList<Temas> music = new ArrayList<Temas>();
+							music.add(nuevoTema);
+							try {
+								ControladorDB.insertMusic(music);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 					}
 				});
@@ -391,7 +402,7 @@ public class RegistrarTema extends JDialog {
 		ArrayList<String> datos = new ArrayList<>();
 		ArrayList<Grupo> gru = new ArrayList<>();
 		
-		if(modelArtistaSelect.isEmpty())
+		if(modelGrupSelect.isEmpty())
 		{
 			gru = null;
 		}
@@ -400,13 +411,12 @@ public class RegistrarTema extends JDialog {
 		{
 			for(int i=0; i < modelGrupSelect.size(); i++)
 			{
-				//datos.add(i, st.execute("Select * from Persona where "))
+//				gru.add(i, st.execute("Select * from Persona where "));
 			}
 		}
-		
+		System.out.println(gru);
 		return gru;
 	}
-
 	private ArrayList<Artista> arregloDeArtistInvitados(Statement st) {
 		
 		ArrayList<String> datos = new ArrayList<>();
@@ -424,7 +434,7 @@ public class RegistrarTema extends JDialog {
 				//datos.add(i, st.execute("Select * from Persona where "))
 			}
 		}
-		
+		System.out.println(art);
 		return art;
 	}
 
@@ -440,9 +450,11 @@ public class RegistrarTema extends JDialog {
 		modelGrupSelect.removeAllElements();
 	}
 
-	private void loadGrupos() {
-		//TODO: JOrge resuelve este metodo papu
-		
+	private void loadGrupos() throws SQLException {
+		for(Grupo grupo: ControladorDB.obtenerGrupos()) {
+			modelGrupSelect.addElement(grupo.getNombre_grupo());
+		}
+		listArtistasSeleccionados.setModel(modelArtistaSelect);
 	}
 
 	private void loadArtistas() {

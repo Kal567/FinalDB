@@ -14,6 +14,7 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 
 public class Principal extends JFrame {
@@ -87,8 +88,14 @@ public class Principal extends JFrame {
 		JMenuItem mntmAgregarTema = new JMenuItem("Agregar Tema");
 		mntmAgregarTema.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegistrarTema regTema = new RegistrarTema();
-				regTema.setVisible(true);
+				RegistrarTema regTema = null;
+				try {
+					regTema = new RegistrarTema();
+					regTema.setVisible(true);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		mnTemas.add(mntmAgregarTema);
