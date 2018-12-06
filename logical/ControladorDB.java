@@ -1,14 +1,20 @@
 package logical;
 
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+
 import com.mysql.jdbc.Statement;
 
 public class ControladorDB {
 	
+	private static ControladorDB ControladorDB;
 	private ArrayList<Persona> misPersonas;
 	private ArrayList<Usuario> misUsuarios;
 	private ArrayList<Artista> misArtistas;
@@ -16,8 +22,7 @@ public class ControladorDB {
 	private ArrayList<Grupo> misAgrupaciones;
 	private static ArrayList<Temas> misTemas;
 	private static ControladorDB control = null;
-	private static Statement stmt = null;
-	private static ResultSet rs = null;
+	public static String usuario ="";
 	
 	private ControladorDB() {
 		super();
@@ -39,18 +44,56 @@ public class ControladorDB {
 		return control;
 	}
 	
+	public boolean login(String cedula, String clave)
+	{
+		int i=0;
+		boolean correcto = false, encontrado = false;
+		//Antes vamos a validar si fue el administrador que entró
+		if((cedula.equalsIgnoreCase("saul") && clave.equalsIgnoreCase("123")) || (cedula.equalsIgnoreCase("kiana") && clave.equalsIgnoreCase("123")) || (cedula.equalsIgnoreCase("jorgelin") && clave.equalsIgnoreCase("123")));
+		{
+			encontrado = true;
+			correcto = true;
+		}
+		try
+		{
+		while(i<misUsuarios.size() || !encontrado) {
+			if(misUsuarios.get(i).getId_usuario().equalsIgnoreCase(cedula))
+			{
+				//Si encontramos al usuario con la contraseña...
+				if(misUsuarios.get(i).getContrasena().equals(clave))
+				{
+					correcto = true;
+				}
+				encontrado = true;
+				
+			}
+			i++;
+		}
+		}
+		catch(Exception e)
+		{
+			
+		}
+		i=0;
+		return correcto;
+	}
+	
+	
+	
 	public static void main(String[] args) throws SQLException {			
 
-		
+		Statement stmt = null;
+		ResultSet rs = null;
+		Connection conn = getConnection();
 		ControladorDB.misTemas = new ArrayList<>();
 		
 
 		try {
-//		    stmt = (Statement) conn.createStatement();
+		    stmt = (Statement) conn.createStatement();
 //		    createTableIfNotExists(stmt);
-//		    Temas tema = new Temas(6, "la cosa", "musical", "4.20", 3, null, null);
+		    Temas tema = new Temas("6", "la cosa", "musical", "4.20", 3, null, null);
 
-//		    insertTema(tema);
+		    insertTema(tema);
 //		    insertMusic(stmt, misTemas);
 		    rs = stmt.executeQuery("SELECT * FROM temas");
 		    
@@ -91,13 +134,44 @@ public class ControladorDB {
 		}
 		
 		
-//		conn.close();
-//		System.out.println(conn.isClosed());
+		conn.close();
+		System.out.println(conn.isClosed());
 		
 	}
 	
-	public static void getConnection() throws SQLException {
-		String URL = "jdbc:mysql://10.0.0.6:3306/music_stream";
+	public String getTipousuario(String cedula)//PARA ARREGLAR
+	{
+		String tipo ="";
+		boolean encontrado = false;
+		int i=0;
+		
+		if(cedula.equalsIgnoreCase("kiana"))
+		{
+			tipo = "Administrador";
+			encontrado = true;
+		}
+		
+		try
+		{
+		while(i<misUsuarios.size() || !encontrado)
+		{
+			if(misUsuarios.get(i).getId_usuario().equalsIgnoreCase(cedula))
+			{
+				tipo = "UsuarioNormal";
+				encontrado = true;
+			}
+			i++;
+		}
+		}catch(Exception e)
+		{
+			
+		}
+		usuario = tipo;
+		return tipo;
+	}
+	
+	public static Connection getConnection() {
+		String URL = "jdbc:mysql://10.0.0.19:3306/music_stream";
 		String user = "puto";
 		String contra = "puto";
 		Connection conn = null;
@@ -108,10 +182,10 @@ public class ControladorDB {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		stmt = (Statement) conn.createStatement();
+		return conn;
 	}
 	
-	public static void createTableIfNotExists() throws SQLException {
+	public static void createTableIfNotExists(Statement stmt) throws SQLException {
 		
 		try {
 		    stmt.execute("Create table Persona(ID_Persona int primary key not null, Primer_Nombre varchar2(50) not null, Primer_Apellido varchar2(50), Ciudad_Nacimiento varchar2(30) not null, Pais_Nacimiento varchar2(30) not null, Fecha_Nacimiento date not null, Sexo char(1) not null check (Sexo IN ('F', 'M',));");			
@@ -121,7 +195,25 @@ public class ControladorDB {
 //	    stmt.execute("DROP TABLE root1.bar");
 	}
 	
-	public static void insertMusic(ArrayList<Temas> allMusic) throws SQLException {
+	public void insertPersona(String id, String p_nombre, String ciudad, String fecha, char sexo){
+		Persona persona = new Persona(id, p_nombre, ciudad, fecha, sexo);
+	}
+	
+	public void insertUsuario(String id_usuario, String p_nombre, String ciudad, String fecha, char sexo, 
+			String id_persona, String contrasena, String fechaDeUltimoAcceso, String fechaDeRegistro, String email){
+			Usuario usuario = new Usuario(id_usuario, p_nombre, ciudad, fecha, sexo, id_persona, contrasena, 
+					fechaDeUltimoAcceso, fechaDeRegistro, email);
+	}
+	
+	public void insertArtista(String id, String p_nombre, String ciudad, String fecha, char sexo, String id_artista, String id_persona, String nombreArtistico){
+		Artista artista = new Artista(id, p_nombre, ciudad, fecha, sexo, id_artista, id_persona, nombreArtistico);
+	}
+	
+	public void insertGrupo(String id_grupo, ArrayList<Artista> integrantes, String fechaDeFormacion, ArrayList<String> rol, String lugarDeProcedencia){
+		Grupo grupo = new Grupo(id_grupo, integrantes, fechaDeFormacion, rol, lugarDeProcedencia);
+	}
+	
+	public static void insertMusic(Statement stmt, ArrayList<Temas> allMusic) throws SQLException {
 		try {
 			for (Temas music: allMusic) {
 			    stmt.execute("INSERT INTO temas set "+
@@ -139,6 +231,86 @@ public class ControladorDB {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
+	}
+	
+	public int buscarArtista(String identifier)
+	{
+		int posicion = -1;
+		int i=0;
+		
+		while(i<misArtistas.size() || posicion == -1)
+		{
+			if(misArtistas.get(i).getId_artista().equalsIgnoreCase(identifier))
+			{
+				posicion = i;
+			}
+			i++;
+		}
+		return posicion;
+	}
+	
+	public int buscarUsuario(String identifier)
+	{
+		int posicion = -1;
+		int i=0;
+		
+		while(i<misUsuarios.size() || posicion == -1)
+		{
+			if(misUsuarios.get(i).getId_usuario().equalsIgnoreCase(identifier))
+			{
+				posicion = i;
+			}
+			i++;
+		}
+		return posicion;
+	}
+	
+	public int buscarGrupo(String nombre)
+	{
+		int posicion = -1;
+		int i=0;
+		
+		while(i<misAgrupaciones.size() || posicion == -1)
+		{
+			if(misAgrupaciones.get(i).getNombre_grupo().equalsIgnoreCase(nombre))
+			{
+				posicion = i;
+			}
+			i++;
+		}
+		return posicion;
+	}
+	
+	public int buscarAlbum(String identifier)
+	{
+		int posicion = -1;
+		int i=0;
+		
+		while(i<misAlbumes.size() || posicion == -1)
+		{
+			if(misAlbumes.get(i).getId_album().equalsIgnoreCase(identifier))
+			{
+				posicion = i;
+			}
+			i++;
+		}
+		return posicion;
+	}
+	
+	public int buscarTema(String identifier)
+	{
+		int posicion = -1;
+		int i=0;
+		
+		while(i<misTemas.size() || posicion == -1)
+		{
+			if(misTemas.get(i).getId_tema().equalsIgnoreCase(identifier))
+			{
+				posicion = i;
+			}
+			i++;
+		}
+		return posicion;
 	}
 
 	public ArrayList<Persona> getMisPersonas() {
@@ -168,21 +340,6 @@ public class ControladorDB {
 	public static void insertTema(Temas tema) {
 		misTemas.add(tema);		
 	}
-	
-	public static Boolean login(String username, String password) throws SQLException {
-		if(stmt != null) {
-			getConnection();
-		}
-		Boolean result = false;
-		rs = stmt.executeQuery("SELECT fk_id_persona, id_usuario FROM usuario WHERE "+
-								"username='"+username+"' AND "+
-								"contrasena='"+password+"';");
-	    
-	    if (!rs.isLast()) {
-		    result = true;
-		}
-		return result;
-	}
+
 	
 }
-
