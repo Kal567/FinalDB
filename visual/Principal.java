@@ -13,56 +13,60 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Principal extends JFrame {
 
 	private JPanel contentPane;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Principal frame = new Principal();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public Principal() {
+	
+	public Principal(String username) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 799, 662);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
-		JMenu mnArtistas = new JMenu("Artistas");
+		JMenu mnArtistas = new JMenu("Personas");
 		menuBar.add(mnArtistas);
 		
-		JMenuItem mntmBuscarArtista = new JMenuItem("Buscar Artista");
+		JMenuItem mntmBuscarArtista = new JMenuItem("Registrar persona");
+		mntmBuscarArtista.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RegistrarPersona regPersona = new RegistrarPersona();
+				regPersona.setVisible(true);
+			}
+		});
 		mnArtistas.add(mntmBuscarArtista);
 		
-		JMenuItem mntmAgregarArtista = new JMenuItem("Agregar Artista");
+		JMenuItem mntmAgregarArtista = new JMenuItem("Listado de usuarios");
+		mntmAgregarArtista.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ListadoUsuarios listUsuarios = new ListadoUsuarios();
+				listUsuarios.setVisible(true);
+			}
+		});
 		mnArtistas.add(mntmAgregarArtista);
-		
-		JMenuItem mntmListarArtistas = new JMenuItem("Listar Artistas");
-		mnArtistas.add(mntmListarArtistas);
 		
 		JMenu mnlbumes = new JMenu("\u00E1lbumes");
 		menuBar.add(mnlbumes);
 		
 		JMenuItem mntmBuscarAlbum = new JMenuItem("Buscar Album");
+		mntmBuscarAlbum.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Buscador buscador = new Buscador();
+				buscador.setVisible(true);
+			}
+		});
 		mnlbumes.add(mntmBuscarAlbum);
 		
 		JMenuItem mntmAgregarAlbum = new JMenuItem("Agregar Album");
+		mntmAgregarAlbum.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Album regAlbum = new Album();
+				regAlbum.setVisible(true);
+			}
+		});
 		mnlbumes.add(mntmAgregarAlbum);
 		
 		JMenuItem mntmListarAlbumes = new JMenuItem("Listar Albumes");
@@ -72,9 +76,21 @@ public class Principal extends JFrame {
 		menuBar.add(mnTemas);
 		
 		JMenuItem mntmBuscarTema = new JMenuItem("Buscar Tema");
+		mntmBuscarTema.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Buscador buscador = new Buscador();
+				buscador.setVisible(true);
+			}
+		});
 		mnTemas.add(mntmBuscarTema);
 		
 		JMenuItem mntmAgregarTema = new JMenuItem("Agregar Tema");
+		mntmAgregarTema.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RegistrarTema regTema = new RegistrarTema();
+				regTema.setVisible(true);
+			}
+		});
 		mnTemas.add(mntmAgregarTema);
 		
 		JMenuItem mntmListarTemas = new JMenuItem("Listar Temas");
@@ -154,5 +170,4 @@ public class Principal extends JFrame {
 		lblGenerotxt.setBounds(12, 13, 229, 34);
 		panel_3.add(lblGenerotxt);
 	}
-
 }
