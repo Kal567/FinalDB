@@ -397,14 +397,56 @@ public class ControladorDB {
 		return result;
 	}
 
-	public static ArrayList<Artista> obtenerArtistas() throws SQLException {
-		ArrayList<Artista> result = new ArrayList<>();
-		rs = stmt.executeQuery("SELECT id_artista, nombre_artistico, fecha_formacion, ciudad_procedencia FROM artista;");
+	public static ArrayList<String> obtenerArtistas() throws SQLException {
+		ArrayList<String> result = new ArrayList<>();
+		rs = stmt.executeQuery("SELECT nombre_artistico FROM artista;");
 		while (!rs.isLast()) {
 			rs.next();
-//			result.add(new Artista(id, nombre, lugarDeNacimiento, fechaDeNacimiento, sexo, id_artista, id_persona, nombreArtistico));
+			result.add((String) rs.getObject(1));
 		}
 		return result;
+	}
+	
+	public static String[] obtenerAlbumes() throws SQLException {
+		ArrayList<String> result = new ArrayList<>();
+		rs = stmt.executeQuery("SELECT titulo FROM album;");
+		while (!rs.isLast()) {
+			rs.next();
+			result.add((String) rs.getObject(1));
+		}
+		String[] result2 = new String[result.size()];
+		for(int i=0;i<result.size();i++) {
+			result2[i] = result.get(i);
+		}
+		return result2;
+	}
+	
+	public static Album obtenerAlbum(String titulo_album) throws SQLException {
+		Album result = null;
+		rs = stmt.executeQuery("SELECT id_album, titulo, fecha_lanzamiento, genero_album, precio FROM album;");
+		while (!rs.isLast()) {
+			rs.next();
+			if((String) rs.getObject(2) == titulo_album) {
+				result = new Album((String) rs.getObject(1), (String) rs.getObject(2), (String) rs.getObject(3), (String) rs.getObject(4), (float) rs.getObject(5));
+			}
+		}
+		return result;
+	}
+	
+	public static String[] gruposToLista(ArrayList<Grupo> result) {
+		String[] result2 = new String[result.size()];
+		for(int i=0;i<result.size();i++) {
+			result2[i] = result.get(i).getNombre_grupo();
+		}
+		return result2;
+	}
+	
+	public static String[] artistasToLista(ArrayList<String> result) {
+		String[] result2 = new String[result.size()];
+		for(int i=0;i<result.size();i++) {
+			result2[i] = result.get(i);
+		}
+		return result2;
 	}
 	
 }

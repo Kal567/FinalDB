@@ -110,10 +110,12 @@ public class RegistrarTema extends JDialog {
 			panelArtistaoGrupo.add(rdbtnAgrupacin);
 			
 			cbxArtista = new JComboBox();
+			cbxArtista.setModel(new DefaultComboBoxModel(ControladorDB.artistasToLista(ControladorDB.obtenerArtistas())));
 			cbxArtista.setBounds(100, 121, 170, 39);
 			panelArtistaoGrupo.add(cbxArtista);
 			
 			cbxAgrupacion = new JComboBox();
+			cbxAgrupacion.setModel(new DefaultComboBoxModel(ControladorDB.gruposToLista(ControladorDB.obtenerGrupos())));
 			cbxAgrupacion.setBounds(366, 121, 194, 39);
 			panelArtistaoGrupo.add(cbxAgrupacion);
 			
@@ -298,8 +300,8 @@ public class RegistrarTema extends JDialog {
 						listGrupReg.setModel(modelGrupReg);
 						modelGrupSelect.removeElementAt(listGrupSelect.getSelectedIndex());
 						listGrupSelect.setModel(modelGrupSelect);
-						btnArtDer.setEnabled(false);
-						btnArtIzq.setEnabled(false);
+						btnGrupDer.setEnabled(false);
+						btnGrupIzq.setEnabled(false);
 						datos = "";
 					}
 				}
@@ -345,6 +347,7 @@ public class RegistrarTema extends JDialog {
 			panelDatosTema.add(lblAlbum);
 			
 			cbxAlbum = new JComboBox();
+			cbxAlbum.setModel(new DefaultComboBoxModel(ControladorDB.obtenerAlbumes()));
 			cbxAlbum.setBounds(202, 251, 236, 39);
 			panelDatosTema.add(cbxAlbum);
 			
@@ -370,7 +373,13 @@ public class RegistrarTema extends JDialog {
 					public void actionPerformed(ActionEvent e) {
 						if(parametersCheck())
 						{
-							Temas nuevoTema = new Temas("T-"+1, txtTitulo.getText(), cbxGenero.getSelectedItem().toString(), txtDuracion.getText(), (int) spnOrden.getValue(), arregloDeArtistInvitados(st), arregloDeGruposInvitados(st), null, null, null);
+							Temas nuevoTema = null;
+							try {
+								nuevoTema = new Temas("T-"+1, txtTitulo.getText(), cbxGenero.getSelectedItem().toString(), txtDuracion.getText(), (int) spnOrden.getValue(), arregloDeArtistInvitados(st), arregloDeGruposInvitados(st), null, null, ControladorDB.obtenerAlbum(cbxAlbum.getSelectedItem().toString()));
+							} catch (SQLException e2) {
+								// TODO Auto-generated catch block
+								e2.printStackTrace();
+							}
 							ArrayList<Temas> music = new ArrayList<Temas>();
 							music.add(nuevoTema);
 							try {
@@ -454,12 +463,14 @@ public class RegistrarTema extends JDialog {
 		for(Grupo grupo: ControladorDB.obtenerGrupos()) {
 			modelGrupSelect.addElement(grupo.getNombre_grupo());
 		}
-		listArtistasSeleccionados.setModel(modelArtistaSelect);
+		listGrupReg.setModel(modelGrupSelect);
 	}
 
-	private void loadArtistas() {
-		// TODO JOrge resuelve este metodo papu
-		
+	private void loadArtistas() throws SQLException {
+		for(String artista: ControladorDB.obtenerArtistas()) {
+			modelArtistaSelect.addElement(artista);
+		}
+		listArtistasBuscados.setModel(modelArtistaSelect);		
 	}
 
 	private boolean parametersCheck() {
