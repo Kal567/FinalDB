@@ -9,17 +9,24 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
+import com.mysql.jdbc.Statement;
+
+import logical.Artista;
 import logical.ControladorDB;
+import logical.Grupo;
 import logical.Temas;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JSpinner;
 import javax.swing.JRadioButton;
 import javax.swing.border.BevelBorder;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -27,6 +34,8 @@ import javax.swing.JScrollBar;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class RegistrarTema extends JDialog {
 
@@ -44,6 +53,24 @@ public class RegistrarTema extends JDialog {
 	private JTextField txtBuscarArtistaSeleccionado;
 	private JTextField txtBuscarGrupReg;
 	private JTextField txtBuscarGrupSelect;
+	private DefaultListModel<String> modelArtistaReg = new DefaultListModel<>();
+	private DefaultListModel<String> modelArtistaSelect = new DefaultListModel<>();
+	private DefaultListModel<String> modelGrupReg = new DefaultListModel<>();
+	private DefaultListModel<String> modelGrupSelect= new DefaultListModel<>();
+	private JList listArtistasBuscados;
+	private JList listArtistasSeleccionados;
+	private JList listGrupReg;
+	private JList listGrupSelect;
+	private String datos;
+	private JButton btnBuscarArtReg;
+	private JButton btnBuscarArtSelect;
+	private JButton btnGrupReg;
+	private JButton btnGrupSelect;
+	private JButton btnArtIzq;
+	private JButton btnArtDer;
+	private JButton btnGrupIzq;
+	private JButton btnGrupDer;
+	private Statement st = null;
 	
 	/**
 	 * Launch the application.
@@ -93,7 +120,17 @@ public class RegistrarTema extends JDialog {
 			panel.add(panelContribuciones);
 			panelContribuciones.setLayout(null);
 			
-			JList listArtistasBuscados = new JList();
+			listArtistasBuscados = new JList();
+			listArtistasBuscados.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if(listArtistasBuscados.getSelectedIndex()>=0)
+					{
+						datos = (String)listArtistasBuscados.getModel().getElementAt(listArtistasBuscados.getSelectedIndex());
+						btnArtIzq.setEnabled(true);
+					}
+				}
+			});
 			listArtistasBuscados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			listArtistasBuscados.setBounds(26, 130, 282, 244);
 			panelContribuciones.add(listArtistasBuscados);
@@ -106,7 +143,17 @@ public class RegistrarTema extends JDialog {
 			lblArtistasSeleccionados.setBounds(406, 38, 271, 33);
 			panelContribuciones.add(lblArtistasSeleccionados);
 			
-			JList listArtistasSeleccionados = new JList();
+			listArtistasSeleccionados = new JList();
+			listArtistasSeleccionados.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if(listArtistasSeleccionados.getSelectedIndex()>=0)
+					{
+						datos = (String)listArtistasSeleccionados.getModel().getElementAt(listArtistasSeleccionados.getSelectedIndex());
+						btnArtDer.setEnabled(true);
+					}
+				}
+			});
 			listArtistasSeleccionados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			listArtistasSeleccionados.setBounds(406, 130, 282, 244);
 			panelContribuciones.add(listArtistasSeleccionados);
@@ -116,7 +163,7 @@ public class RegistrarTema extends JDialog {
 			panelContribuciones.add(txtBuscarArtistaReg);
 			txtBuscarArtistaReg.setColumns(10);
 			
-			JButton btnBuscarArtReg = new JButton("");
+			btnBuscarArtReg = new JButton("");
 			btnBuscarArtReg.setBounds(268, 78, 40, 40);
 			panelContribuciones.add(btnBuscarArtReg);
 			
@@ -125,7 +172,7 @@ public class RegistrarTema extends JDialog {
 			txtBuscarArtistaSeleccionado.setBounds(406, 79, 236, 39);
 			panelContribuciones.add(txtBuscarArtistaSeleccionado);
 			
-			JButton btnBuscarArtSelect = new JButton("");
+			btnBuscarArtSelect = new JButton("");
 			btnBuscarArtSelect.setBounds(648, 78, 40, 40);
 			panelContribuciones.add(btnBuscarArtSelect);
 			
@@ -138,11 +185,21 @@ public class RegistrarTema extends JDialog {
 			txtBuscarGrupReg.setBounds(26, 430, 236, 39);
 			panelContribuciones.add(txtBuscarGrupReg);
 			
-			JButton btnGrupReg = new JButton("");
+			btnGrupReg = new JButton("");
 			btnGrupReg.setBounds(268, 429, 40, 40);
 			panelContribuciones.add(btnGrupReg);
 			
-			JList listGrupReg = new JList();
+			listGrupReg = new JList();
+			listGrupReg.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if(listGrupReg.getSelectedIndex()>=0)
+					{
+						datos = (String)listGrupReg.getModel().getElementAt(listGrupReg.getSelectedIndex());
+						btnGrupIzq.setEnabled(true);
+					}
+				}
+			});
 			listGrupReg.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			listGrupReg.setBounds(26, 481, 282, 244);
 			panelContribuciones.add(listGrupReg);
@@ -156,28 +213,94 @@ public class RegistrarTema extends JDialog {
 			txtBuscarGrupSelect.setBounds(406, 430, 236, 39);
 			panelContribuciones.add(txtBuscarGrupSelect);
 			
-			JButton btnGrupSelect = new JButton("");
+			btnGrupSelect = new JButton("");
 			btnGrupSelect.setBounds(648, 429, 40, 40);
 			panelContribuciones.add(btnGrupSelect);
 			
-			JList listGrupSelect = new JList();
+			listGrupSelect = new JList();
+			listGrupSelect.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if(listGrupSelect.getSelectedIndex()>=0)
+					{
+						datos = (String)listGrupSelect.getModel().getElementAt(listGrupSelect.getSelectedIndex());
+						btnGrupDer.setEnabled(true);
+					}
+				}
+			});
 			listGrupSelect.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			listGrupSelect.setBounds(406, 481, 282, 244);
 			panelContribuciones.add(listGrupSelect);
 			
-			JButton btnArtIzq = new JButton(">");
+			btnArtIzq = new JButton(">");
+			btnArtIzq.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if(!datos.equalsIgnoreCase(""))
+					{
+						modelArtistaSelect.addElement(modelArtistaReg.getElementAt(listArtistasBuscados.getSelectedIndex()));
+						listArtistasSeleccionados.setModel(modelArtistaSelect);
+						modelArtistaReg.removeElementAt(listArtistasBuscados.getSelectedIndex());
+						listArtistasBuscados.setModel(modelArtistaReg);
+						btnArtDer.setEnabled(false);
+						btnArtIzq.setEnabled(false);
+						datos = "";
+					}
+				}
+			});
 			btnArtIzq.setBounds(316, 179, 80, 39);
 			panelContribuciones.add(btnArtIzq);
 			
-			JButton btnArtDer = new JButton("<");
+			btnArtDer = new JButton("<");
+			btnArtDer.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if(!datos.equalsIgnoreCase(""))
+					{
+						modelArtistaReg.addElement(modelArtistaSelect.getElementAt(listArtistasSeleccionados.getSelectedIndex()));
+						listArtistasBuscados.setModel(modelArtistaReg);
+						modelArtistaSelect.removeElementAt(listArtistasSeleccionados.getSelectedIndex());
+						listArtistasSeleccionados.setModel(modelArtistaSelect);
+						btnArtDer.setEnabled(false);
+						btnArtIzq.setEnabled(false);
+						datos = "";
+					}
+				}
+			});
 			btnArtDer.setBounds(316, 265, 80, 39);
 			panelContribuciones.add(btnArtDer);
 			
-			JButton btnGrupIzq = new JButton(">");
+			btnGrupIzq = new JButton(">");
+			btnGrupIzq.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if(!datos.equalsIgnoreCase(""))
+					{
+						modelGrupSelect.addElement(modelGrupReg.getElementAt(listGrupReg.getSelectedIndex()));
+						listGrupSelect.setModel(modelGrupSelect);
+						modelGrupReg.removeElementAt(listGrupReg.getSelectedIndex());
+						listGrupReg.setModel(modelGrupReg);
+						btnGrupDer.setEnabled(false);
+						btnGrupIzq.setEnabled(false);
+						datos = "";
+					}
+				}
+			});
 			btnGrupIzq.setBounds(316, 542, 80, 39);
 			panelContribuciones.add(btnGrupIzq);
 			
-			JButton btnGrupDer = new JButton("<");
+			btnGrupDer = new JButton("<");
+			btnGrupDer.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if(!datos.equalsIgnoreCase(""))
+					{
+						modelGrupSelect.addElement(modelGrupSelect.getElementAt(listGrupSelect.getSelectedIndex()));
+						listGrupReg.setModel(modelGrupReg);
+						modelGrupSelect.removeElementAt(listGrupSelect.getSelectedIndex());
+						listGrupSelect.setModel(modelGrupSelect);
+						btnArtDer.setEnabled(false);
+						btnArtIzq.setEnabled(false);
+						datos = "";
+					}
+				}
+			});
 			btnGrupDer.setBounds(316, 627, 80, 39);
 			panelContribuciones.add(btnGrupDer);
 			
@@ -229,6 +352,10 @@ public class RegistrarTema extends JDialog {
 			spnOrden = new JSpinner();
 			spnOrden.setBounds(470, 250, 89, 40);
 			panelDatosTema.add(spnOrden);
+			
+			ButtonGroup bgroup = new ButtonGroup();
+			bgroup.add(rdbtnAgrupacin);
+			bgroup.add(rdbtnArtista);
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -240,7 +367,7 @@ public class RegistrarTema extends JDialog {
 					public void actionPerformed(ActionEvent e) {
 						if(parametersCheck())
 						{
-							//Temas nuevoTema = new Temas(ControladorDB.getInstance().getMisTemas().size()+1, txtTitulo.getText(), cbxGenero.getSelectedItem().toString(), txtDuracion.getText(), Integer.parseInt(spnOrden.getValue()), artistasInvitados, gruposInvitados, )
+							Temas nuevoTema = new Temas(ControladorDB.getInstance().getMisTemas().size()+1, txtTitulo.getText(), cbxGenero.getSelectedItem().toString(), txtDuracion.getText(), (int) spnOrden.getValue(), arregloDeArtistInvitados(st), arregloDeGruposInvitados(st), null, null);
 						}
 					}
 				});
@@ -254,6 +381,73 @@ public class RegistrarTema extends JDialog {
 				buttonPane.add(btnSalir);
 			}
 		}
+		
+		loadArtistas();
+		loadGrupos();
+	}
+	
+	private ArrayList<Grupo> arregloDeGruposInvitados(Statement st2) {
+		
+		ArrayList<String> datos = new ArrayList<>();
+		ArrayList<Grupo> gru = new ArrayList<>();
+		
+		if(modelArtistaSelect.isEmpty())
+		{
+			gru = null;
+		}
+		
+		else
+		{
+			for(int i=0; i < modelGrupSelect.size(); i++)
+			{
+				//datos.add(i, st.execute("Select * from Persona where "))
+			}
+		}
+		
+		return gru;
+	}
+
+	private ArrayList<Artista> arregloDeArtistInvitados(Statement st) {
+		
+		ArrayList<String> datos = new ArrayList<>();
+		ArrayList<Artista> art = new ArrayList<>();
+		
+		if(modelArtistaSelect.isEmpty())
+		{
+			art = null;
+		}
+		
+		else
+		{
+			for(int i=0; i < modelArtistaSelect.size(); i++)
+			{
+				//datos.add(i, st.execute("Select * from Persona where "))
+			}
+		}
+		
+		return art;
+	}
+
+	private void clean()
+	{
+		txtBuscarArtistaReg.setText("");
+		txtBuscarArtistaSeleccionado.setText("");
+		txtBuscarGrupReg.setText("");
+		txtBuscarGrupSelect.setText("");
+		txtDuracion.setText("");
+		txtTitulo.setText("");
+		modelArtistaSelect.removeAllElements();
+		modelGrupSelect.removeAllElements();
+	}
+
+	private void loadGrupos() {
+		//TODO: JOrge resuelve este metodo papu
+		
+	}
+
+	private void loadArtistas() {
+		// TODO JOrge resuelve este metodo papu
+		
 	}
 
 	private boolean parametersCheck() {
